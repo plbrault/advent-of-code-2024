@@ -16,6 +16,9 @@ def is_gradual(report):
       return False
   return True
 
+def is_safe(report):
+  return (is_increasing(report) or is_decreasing(report)) and is_gradual(report)
+
 reports = []
 safe_reports_count = 0
 
@@ -24,8 +27,6 @@ with open('input.txt', 'r') as input_file:
     levels = [int(part) for part in line.split()]
     reports.append(levels)
 
-for report in reports:
-  if (is_increasing(report) or is_decreasing(report)) and is_gradual(report):
-    safe_reports_count += 1
+safe_reports_count = len([report for report in reports if is_safe(report)])
 
 print('Safe reports count:', safe_reports_count)
