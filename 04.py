@@ -68,16 +68,41 @@ def check_for_xmas(puzzle, row, col):
       num_occurrences += 1
   return num_occurrences
 
+def check_for_x_mas(puzzle, row, col):
+  if puzzle[row][col] != 'A':
+    return False
+  if row < 1 or col < 1 or row > len(puzzle) - 2 or col > len(puzzle[row]) - 2:
+    return False
+  if (
+    (
+      (puzzle[row-1][col-1] == 'M' and puzzle[row+1][col+1] == 'S')
+      or (puzzle[row-1][col-1] == 'S' and puzzle[row+1][col+1] == 'M')
+    )
+    and
+    (
+      (puzzle[row-1][col+1] == 'M' and puzzle[row+1][col-1] == 'S')
+      or (puzzle[row-1][col+1] == 'S' and puzzle[row+1][col-1] == 'M')
+    )
+  ):
+    return True
+  return False
+
 puzzle = []
 
 with open('input.txt', 'r') as file:
   for line in file:
     puzzle.append(list(line.strip()))
 
+# Part 1
 xmas_count = 0
-
 for row in range(len(puzzle)):
   for col in range(len(puzzle[row])):
     xmas_count += check_for_xmas(puzzle, row, col)
-
 print('Number of XMAS occurrences:', xmas_count)
+
+# Part 2
+x_mas_count = 0
+for row in range(len(puzzle)):
+  for col in range(len(puzzle[row])):
+    x_mas_count += int(check_for_x_mas(puzzle, row, col))
+print ('Number of X-MAS occurrences:', x_mas_count)
