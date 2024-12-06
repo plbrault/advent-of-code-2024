@@ -39,10 +39,13 @@ def compare_page_numbers(x, y):
   return 0
 
 correct_updates = []
+middle_page_sum = 0
 
 for page_update in page_updates:
   ordered_update = sorted(page_update, key=cmp_to_key(compare_page_numbers))
   if ordered_update == page_update:
     correct_updates.append(page_update)
+    middle_page_sum += page_update[len(page_update) // 2]
 
 print('Correct updates:', correct_updates)
+print('Sum of middle page numbers:', middle_page_sum)
