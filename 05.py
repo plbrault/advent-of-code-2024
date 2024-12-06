@@ -1,6 +1,11 @@
+from functools import cmp_to_key
+
 class OrderingRule:
-  is_before: [int] = []
-  is_after: [int] = []
+  is_before: [int]
+  is_after: [int]
+  def __init__(self):
+    self.is_before = []
+    self.is_after = []
 
 raw_ordering_rules = []
 page_updates = []
@@ -31,7 +36,20 @@ for raw_ordering_rule in raw_ordering_rules:
   ordering_rules[first_number].is_before.append(second_number)
   ordering_rules[second_number].is_after.append(first_number)
 
-for rule in ordering_rules:
-  print('IS BEFORE', rule, ordering_rules[rule].is_before)
-  print('IS AFTER', rule, ordering_rules[rule].is_after)
-  print('-------------------------------------------------')
+def compare_page_numbers(x, y):
+  if x in ordering_rules[y].is_before:
+    return -1
+  if y in ordering_rules[x].is_before:
+    return 1
+  return 0
+
+correct_updates = []
+
+for page_update in page_updates:
+  ordered_update = sorted(page_update, key=cmp_to_key(compare_page_numbers))
+  if ordered_update[0] == page_update[0]:
+    print(ordered_update, '!!!!!!!!!!!!!!', page_update)
+  #if ordered_update == page_update:
+    #correct_updates.append(page_update)
+
+print('Correct updates:', correct_updates)
