@@ -4,6 +4,7 @@ GUARD_LEFT = '<'
 GUARD_RIGHT = '>'
 OBSTACLE = '#'
 VISITED_POINT = 'X'
+UNVISITED_POINT = '.'
 
 class Map():
   def __init__(self):
@@ -68,6 +69,10 @@ class Map():
   def loop_detected(self):
     return self._loop_detected
 
+  @loop_detected.setter
+  def loop_detected(self, value):
+    self._loop_detected = value
+
   def turn_guard(self):
     if self.guard_symbol == GUARD_UP:
       self.guard_symbol = GUARD_RIGHT
@@ -106,9 +111,33 @@ class Map():
   def count_visited_positions(self):
     return len(self.get_visited_positions())
 
+  def add_obstacle(self, x, y):
+    self._map[y][x] = OBSTACLE
+
+  def remove_obstacle(self, x, y):
+    if (x, y) in [hit[0] for hit in self._obstacle_hits]:
+      self._map[y][x] = VISITED_POINT
+    else:
+      self._map[y][x] = UNVISITED_POINT
+
 map = Map()
 
 while map.guard_still_on_map:
   map.move_guard()
 
 print('Number of distinct visited positions:', map.count_visited_positions())
+
+visited_positions = map.get_visited_positions()
+
+loop_detections = 0
+
+for position in visited_positions:
+  map.add_obstacle(*position)
+  while map.guard_still_on_map and not map.loop_detected:
+    map.move_guard()
+  if map.loop_detected:
+    loop_detections += 1
+    map.loop_detected = False
+  map.remove_obstacle(*position)
+
+print('Number of loop detections:', loop_detections)
