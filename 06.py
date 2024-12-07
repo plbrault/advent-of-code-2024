@@ -14,7 +14,8 @@ class Map():
     for y in range(len(self._map)):
       for x in range(len(self._map[y])):
         if self._map[y][x] in [GUARD_UP, GUARD_DOWN, GUARD_LEFT, GUARD_RIGHT]:
-          self._guard_pos = (x, y)
+          self._initial_guard_pos = self._guard_pos = (x, y)
+          self._initial_guard_symbol = self._map[y][x]
           break
 
     self._obstacle_hits = []
@@ -120,6 +121,14 @@ class Map():
     else:
       self._map[y][x] = UNVISITED_POINT
 
+  def reset_guard_pos(self):
+    old_guard_pos = self._guard_pos
+    self._guard_pos = self._initial_guard_pos
+    if self.check_if_pos_on_map(*old_guard_pos):
+      self._map[old_guard_pos[1]][old_guard_pos[0]] = VISITED_POINT
+    self.guard_symbol = self._initial_guard_symbol
+    print('!!!!!!!', self.guard_pos, self.guard_symbol)
+
 map = Map()
 
 while map.guard_still_on_map:
@@ -132,6 +141,7 @@ visited_positions = map.get_visited_positions()
 loop_detections = 0
 
 for position in visited_positions:
+  map.reset_guard_pos()
   map.add_obstacle(*position)
   while map.guard_still_on_map and not map.loop_detected:
     map.move_guard()
