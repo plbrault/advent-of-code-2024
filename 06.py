@@ -4,16 +4,22 @@ GUARD_LEFT = '<'
 GUARD_RIGHT = '>'
 OBSTACLE = '#' 
 
-map = None
-guard_position = None
+class Map():
+  @property
+  def guard_pos(self):
+    return self._guard_pos
 
-with open('input.txt', 'r') as file:
-  map = [list(line.strip()) for line in file]
+  def __init__(self):
+    with open('input.txt', 'r') as file:
+      self._map = [list(line.strip()) for line in file]
 
-for row in range(len(map)):
-  for col in range(len(map[row])):
-    if map[row][col] in [GUARD_UP, GUARD_DOWN, GUARD_LEFT, GUARD_RIGHT]:
-      guard_position = (row, col)
-      break
+    for y in range(len(self._map)):
+      for x in range(len(self._map[y])):
+        if self._map[y][x] in [GUARD_UP, GUARD_DOWN, GUARD_LEFT, GUARD_RIGHT]:
+          self._guard_pos = (x, y)
+          break
 
-print('Initial guard position:', guard_position)
+map = Map()
+print(map.guard_pos)
+
+  
