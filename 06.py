@@ -16,6 +16,9 @@ class Map():
           self._guard_pos = (x, y)
           break
 
+    self._obstacle_hits = []
+    self._loop_detected = False
+
   def check_if_pos_on_map(self, x, y):
     return 0 <= y < len(self._map) and 0 <= x < len(self._map[y])
 
@@ -61,6 +64,10 @@ class Map():
     next_x, next_y = self.guard_next_pos
     return self._map[next_y][next_x] != OBSTACLE
 
+  @property
+  def loop_detected(self):
+    return self._loop_detected
+
   def turn_guard(self):
     if self.guard_symbol == GUARD_UP:
       self.guard_symbol = GUARD_RIGHT
@@ -80,11 +87,24 @@ class Map():
       if self.guard_still_on_map:
         self.guard_symbol = previous_guard_symbol
     else:
+      obstacle_hit = (self.guard_next_pos, self.guard_symbol)
+      if obstacle_hit in self._obstacle_hits:
+        self._loop_detected = True
+      else:
+        self._obstacle_hits.append(obstacle_hit)
       self.turn_guard()
       self.move_guard()
 
+  def get_visited_positions(self):
+    positions = []
+    for y in range(len(self._map)):
+      for x in range(len(self._map[y])):
+        if self._map[y][x] == VISITED_POINT:
+          positions.append((x, y))
+    return positions
+
   def count_visited_positions(self):
-    return sum([row.count(VISITED_POINT) for row in self._map])
+    return len(self.get_visited_positions())
 
 map = Map()
 
