@@ -127,7 +127,6 @@ class Map():
     if self.check_if_pos_on_map(*old_guard_pos):
       self._map[old_guard_pos[1]][old_guard_pos[0]] = VISITED_POINT
     self.guard_symbol = self._initial_guard_symbol
-    print('!!!!!!!', self.guard_pos, self.guard_symbol)
 
 map = Map()
 
@@ -142,12 +141,13 @@ loop_detections = 0
 
 for position in visited_positions:
   map.reset_guard_pos()
-  map.add_obstacle(*position)
-  while map.guard_still_on_map and not map.loop_detected:
-    map.move_guard()
-  if map.loop_detected:
-    loop_detections += 1
-    map.loop_detected = False
-  map.remove_obstacle(*position)
+  if position != map.guard_pos:
+    map.add_obstacle(*position)
+    while map.guard_still_on_map and not map.loop_detected:
+      map.move_guard()
+    if map.loop_detected:
+      loop_detections += 1
+      map.loop_detected = False
+    map.remove_obstacle(*position)
 
 print('Number of loop detections:', loop_detections)
