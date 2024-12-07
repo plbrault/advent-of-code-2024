@@ -1,3 +1,5 @@
+from datetime import datetime
+
 GUARD_UP = '^'
 GUARD_DOWN = 'v'
 GUARD_LEFT = '<'
@@ -127,6 +129,7 @@ class Map():
     if self.check_if_pos_on_map(*old_guard_pos):
       self._map[old_guard_pos[1]][old_guard_pos[0]] = VISITED_POINT
     self.guard_symbol = self._initial_guard_symbol
+    self._obstacle_hits = []
 
 map = Map()
 
@@ -139,6 +142,7 @@ visited_positions = map.get_visited_positions()
 
 loop_detections = 0
 
+start_time = datetime.now()
 for position in visited_positions:
   map.reset_guard_pos()
   if position != map.guard_pos:
@@ -149,5 +153,7 @@ for position in visited_positions:
       loop_detections += 1
       map.loop_detected = False
     map.remove_obstacle(*position)
+end_time = datetime.now()
 
 print('Number of loop detections:', loop_detections)
+print('Executed in:', (end_time - start_time).total_seconds(), 'seconds.')
