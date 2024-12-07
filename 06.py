@@ -35,7 +35,7 @@ class Map():
   def guard_symbol(self):
     return self._map[self.guard_y][self.guard_x]
 
-  @guard.setter
+  @guard_symbol.setter
   def guard_symbol(self, value):
     self._map[self.guard_y][self.guard_x] = value
 
@@ -57,7 +57,7 @@ class Map():
   @property
   def guard_can_move(self):
     if not self.check_if_pos_on_map(*self.guard_next_pos):
-      return True
+      return self.check_if_pos_on_map(*self.guard_pos)
     next_x, next_y = self.guard_next_pos
     return self._map[next_y][next_x] != OBSTACLE
 
@@ -83,6 +83,12 @@ class Map():
       self.turn_guard()
       self.move_guard()
 
+  def count_visited_positions(self):
+    return sum([row.count(VISITED_POINT) for row in self._map])
 
+map = Map()
 
-  
+while map.guard_still_on_map:
+  map.move_guard()
+
+print('Number of distinct visited positions:', map.count_visited_positions())
