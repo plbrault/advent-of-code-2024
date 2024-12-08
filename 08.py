@@ -25,8 +25,6 @@ for row in map:
     if location.frequency is not None:
       antennas.append(location)
 
-antinodes = []
-
 def get_line_equation(location1, location2):
   x1, y1 = location1.position
   x2, y2 = location2.position  
