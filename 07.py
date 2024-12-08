@@ -19,23 +19,22 @@ with open('input.txt', 'r') as file:
 
 operators = ['+', '*']
 
-def get_possible_results(operands):
-  if len(operands) == 1:
-    return operands
-  else:
-    results = []
-    for operator in operators:
-      results += [
-        eval(str(operands[-1]) + operator + str(result))
-          for result in get_possible_results(operands[:-1])
-      ]
-    return results
+def get_possible_results(left_operands: [int], right_operands: [int]):
+  if len(left_operands) < 2:
+    if len(right_operands) == 0:
+      return left_operands
+    return get_possible_results(left_operands + [right_operands[0]], right_operands[1:])
+  possible_results = []
+  for operator in operators:
+    left_result = eval(str(left_operands[0]) + operator + str(left_operands[1]))
+    possible_results += get_possible_results([left_result], right_operands)
+  return possible_results
 
 total_calibration_result = 0
 
 start_time = datetime.now()
 for equation in equations:
-  possible_results = get_possible_results(equation.operands)
+  possible_results = get_possible_results([], equation.operands)
   if equation.test_value in possible_results:
     total_calibration_result += equation.test_value
 end_time = datetime.now()    
