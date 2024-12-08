@@ -5,6 +5,12 @@ class Location:
   frequency: str = None
   is_antinode: bool = False
   position: tuple = (-1, -1)
+  def __repr__(self):
+    if self.frequency is not None:
+      return self.frequency
+    if self.is_antinode:
+      return '#'
+    return '.'
 
 map = []
 
@@ -37,6 +43,8 @@ def get_line_equation(location1, location2):
 def is_on_map(x, y):
   return x >= 0 and x < len(map[0]) and y >= 0 and y < len(map)
 
+# Part 1
+
 for antenna in antennas:
   for other_antenna in [other_antenna for other_antenna in antennas if other_antenna != antenna]:
     if antenna.frequency == other_antenna.frequency:
@@ -63,4 +71,29 @@ for antenna in antennas:
 
 antinode_count = len([location for row in map for location in row if location.is_antinode])
 
-print('Number of antinodes:', antinode_count)
+print('Number of antinodes (part 1):', antinode_count)
+
+# Part 2
+
+for antenna in antennas:
+  for other_antenna in [other_antenna for other_antenna in antennas if other_antenna != antenna]:
+    if antenna.frequency == other_antenna.frequency:
+      line_equation = get_line_equation(antenna, other_antenna)
+      if line_equation is None: # The antennas have the same X position
+        for row in map:
+          row[antenna.position[0]].is_antinode = True
+      else:
+        for x in range(len(map[0])):
+          m, b = line_equation
+          y = round(m * x + b)
+          if is_on_map(x, y):
+            map[y][x].is_antinode = True
+
+antinode_count = len([location for row in map for location in row if location.is_antinode])
+
+for row in map:
+  for location in row:
+    print(location, end='')
+  print()
+
+print('Number of antinodes (part 2):', antinode_count)
