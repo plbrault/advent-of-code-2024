@@ -61,12 +61,10 @@ for antenna in antennas:
         m, b = line_equation
         antinode1_y = m * antinode1_x + b
         antinode2_y = m * antinode2_x + b
-      if is_on_map(antinode1_x, antinode1_y):
-        map[antinode1_y][antinode1_x].is_antinode = True
-      if is_on_map(antinode2_x, antinode2_y):
-        map[antinode2_y][antinode2_x].is_antinode = True
-
-        
+      if antinode1_y.is_integer() and is_on_map(antinode1_x, antinode1_y):
+        map[int(antinode1_y)][antinode1_x].is_antinode = True
+      if antinode2_y.is_integer() and is_on_map(antinode2_x, antinode2_y):
+        map[int(antinode2_y)][antinode2_x].is_antinode = True
 
 antinode_count = len([location for row in map for location in row if location.is_antinode])
 
