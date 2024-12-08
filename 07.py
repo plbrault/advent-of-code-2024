@@ -19,22 +19,24 @@ with open('input.txt', 'r') as file:
 
 operators = ['+', '*', '']
 
-def get_possible_results(left_operands: [int], right_operands: [int]):
+def get_possible_results(left_operands: [int], right_operands: [int], max_result: [int]):
   if len(left_operands) < 2:
     if len(right_operands) == 0:
       return left_operands
-    return get_possible_results(left_operands + [right_operands[0]], right_operands[1:])
+    return get_possible_results(left_operands + [right_operands[0]], right_operands[1:], max_result)
+  if left_operands[0] > max_result:
+    return [left_operands[0]]
   possible_results = []
   for operator in operators:
-    left_result = eval(str(left_operands[0]) + operator + str(left_operands[1]))
-    possible_results += get_possible_results([left_result], right_operands)
+    left_result = eval(f'{left_operands[0]}{operator}{left_operands[1]}')
+    possible_results += get_possible_results([left_result], right_operands, max_result)
   return possible_results
 
 total_calibration_result = 0
 
 start_time = datetime.now()
 for equation in equations:
-  possible_results = get_possible_results([], equation.operands)
+  possible_results = get_possible_results([], equation.operands, equation.test_value)
   if equation.test_value in possible_results:
     total_calibration_result += equation.test_value
 end_time = datetime.now()    
