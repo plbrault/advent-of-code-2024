@@ -46,14 +46,27 @@ for antenna in antennas:
       and antenna.frequency == other_antenna.frequency
     ):
       line_equation = get_line_equation(antenna, other_antenna)
+      antinode1_x = antinode1_y = antinode2_x = antinode2_y = None
       if line_equation is None: # The antennas have the same X position
+        antinode1_x = antinode2_x = antenna.position[0]
         [y1, y2] = sorted([antenna.position[1], other_antenna.position[1]])
-        antinode1_y = y1 - abs(y2 - y1)
-        antinode2_y = y2 + abs(y2 - y1)
-        if is_on_map(antenna.position[0], antinode1_y):
-          map[antinode1_y][antenna.position[0]].is_antinode = True
-        if is_on_map(antenna.position[0], antinode2_y):
-          map[antinode2_y][antenna.position[0]].is_antinode = True
+        y_diff = y2 - y1
+        antinode1_y = y1 - y_diff
+        antinode2_y = y2 + y_diff
+      else:
+        [x1, x2] = sorted([antenna.position[0], other_antenna.position[0]])
+        x_diff = x2 - x1
+        antinode1_x = x1 - x_diff
+        antinode2_x = x2 + x_diff
+        m, b = line_equation
+        antinode1_y = m * antinode1_x + b
+        antinode2_y = m * antinode2_x + b
+      if is_on_map(antinode1_x, antinode1_y):
+        map[antinode1_y][antinode1_x].is_antinode = True
+      if is_on_map(antinode2_x, antinode2_y):
+        map[antinode2_y][antinode2_x].is_antinode = True
+
+        
 
 antinode_count = len([location for row in map for location in row if location.is_antinode])
 
