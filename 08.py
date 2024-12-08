@@ -38,21 +38,18 @@ def is_on_map(x, y):
   return x >= 0 and x < len(map[0]) and y >= 0 and y < len(map)
 
 for antenna in antennas:
-  for other_antenna in antennas:
-    if (
-      antenna.position != other_antenna.position
-      and antenna.frequency == other_antenna.frequency
-    ):
+  for other_antenna in [other_antenna for other_antenna in antennas if other_antenna != antenna]:
+    if antenna.frequency == other_antenna.frequency:
       line_equation = get_line_equation(antenna, other_antenna)
       antinode1_x = antinode1_y = antinode2_x = antinode2_y = None
       if line_equation is None: # The antennas have the same X position
         antinode1_x = antinode2_x = antenna.position[0]
-        [y1, y2] = sorted([antenna.position[1], other_antenna.position[1]])
+        [y1, y2] = [antenna.position[1], other_antenna.position[1]]
         y_diff = y2 - y1
         antinode1_y = y1 - y_diff
         antinode2_y = y2 + y_diff
       else:
-        [x1, x2] = sorted([antenna.position[0], other_antenna.position[0]])
+        [x1, x2] = ([antenna.position[0], other_antenna.position[0]])
         x_diff = x2 - x1
         antinode1_x = x1 - x_diff
         antinode2_x = x2 + x_diff
