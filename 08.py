@@ -54,14 +54,10 @@ for antenna in antennas:
         antinode1_x = x1 - x_diff
         antinode2_x = x2 + x_diff
         m, b = line_equation
-        antinode1_y = m * antinode1_x + b
-        antinode2_y = m * antinode2_x + b
-      if antinode1_y.is_integer():
-        antinode1_y = int(antinode1_y)
+        antinode1_y = round(m * antinode1_x + b)
+        antinode2_y = round(m * antinode2_x + b)
         if is_on_map(antinode1_x, antinode1_y):
           map[antinode1_y][antinode1_x].is_antinode = True
-      if antinode2_y.is_integer():
-        antinode2_y = int(antinode2_y)
         if is_on_map(antinode2_x, antinode2_y):
           map[int(antinode2_y)][antinode2_x].is_antinode = True
 
