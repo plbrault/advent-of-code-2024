@@ -11,7 +11,7 @@ map = []
 with open('input.txt', 'r') as file:
   for y, line in enumerate(file):
     map_row = []
-    for x, char in enumerate(line):
+    for x, char in enumerate(line.strip()):
       location = Location()
       if char != '.':
         location.frequency = char
