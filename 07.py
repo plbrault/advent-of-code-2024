@@ -1,3 +1,5 @@
+from datetime import datetime
+
 class Equation:
   def __init__(self, test_value: int, operands: list[int]):
     self.test_value = test_value
@@ -29,5 +31,14 @@ def get_possible_results(operands):
       ]
     return results
 
-print(get_possible_results([81, 40, 27]))
-  
+total_calibration_result = 0
+
+start_time = datetime.now()
+for equation in equations:
+  possible_results = get_possible_results(equation.operands)
+  if equation.test_value in possible_results:
+    total_calibration_result += equation.test_value
+end_time = datetime.now()    
+
+print('Total calibration result:', total_calibration_result)
+print('Executed in:', (end_time - start_time).total_seconds(), 'seconds.')
