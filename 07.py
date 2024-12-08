@@ -17,7 +17,7 @@ with open('input.txt', 'r') as file:
     operands = list(map(int, colon_split[1].split()))
     equations.append(Equation(test_value, operands))
 
-operators = ['+', '*', ''] # '' is for concatenation
+operators = ['+', '*']
 
 def get_possible_results(operands):
   if len(operands) == 1:
