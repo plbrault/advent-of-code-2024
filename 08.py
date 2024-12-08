@@ -74,7 +74,7 @@ for antenna in antennas:
       x_diff = abs(antenna.position[0] - other_antenna.position[0])
       line_equation = get_line_equation(antenna, other_antenna)
       x_values = (
-        [x for x in range(antenna.position[0], -1, x_diff)]
+        [x for x in range(antenna.position[0], -1, -x_diff)]
         + [x for x in range(antenna.position[0], len(map[0]), x_diff)]
       )
       for x in x_values:
@@ -84,10 +84,5 @@ for antenna in antennas:
           map[y][x].is_antinode = True
 
 antinode_count = len([location for row in map for location in row if location.is_antinode])
-
-for row in map:
-  for location in row:
-    print(location, end=' ')
-  print()
 
 print('Number of antinodes (part 2):', antinode_count)
