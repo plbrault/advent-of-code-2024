@@ -19,4 +19,8 @@ with open('input.txt', 'r') as file:
       map_row.append(location)
     map.append(map_row)
 
-print(map)
+antennas = []
+for row in map:
+  for location in row:
+    if location.frequency is not None:
+      antennas.append(location)
