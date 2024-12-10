@@ -34,3 +34,7 @@ for i in range(len(blocks) - 1, -1, -1):
             blocks[i], blocks[j] = blocks[j], blocks[i]
             previous_free_block_id = j
             break
+
+checksum = sum([block.file_id * i for i, block in enumerate(blocks) if block.file_id is not None])
+
+print('Checksum:', checksum)
