@@ -56,4 +56,14 @@ blocks = get_blocks(disk_map)
 
 last_file_id = -1
 for i in range(len(blocks) - 1, -1, -1):
-    pass
+    file_start_idx = None
+    if blocks[i].is_free_space:
+        if last_file_id > -1:
+            file_start_idx = i + 1
+            last_file_id = -1
+    elif last_file_id == -1:
+        last_file_id = blocks[i].file_id
+    elif blocks[i].file_id != last_file_id:
+        file_start_idx = i + 1
+    if file_start_idx != None:
+        pass
