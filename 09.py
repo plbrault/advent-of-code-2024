@@ -86,4 +86,4 @@ checksum = get_checksum(blocks)
 end_time = datetime.now()
 
 print('Part 2 Checksum:', checksum)
-print('Executed in:', (end_time - start_time).total_seconds(), 'seconds.')
+print('Part 2 executed in:', (end_time - start_time).total_seconds(), 'seconds.')
