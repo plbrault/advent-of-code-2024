@@ -17,14 +17,19 @@ class Block:
             return '.'
         return str(self.file_id)
 
-blocks = []
+def get_blocks():
+  blocks = []
+  for i in range(0, len(disk_map), 2):
+      for j in range(disk_map[i]):
+          blocks.append(Block(file_id=int(i/2)))
+      if i + 1 < len(disk_map):
+          for j in range(disk_map[i+1]):
+              blocks.append(Block(is_free_space=True))
+  return blocks
 
-for i in range(0, len(disk_map), 2):
-    for j in range(disk_map[i]):
-        blocks.append(Block(file_id=int(i/2)))
-    if i + 1 < len(disk_map):
-        for j in range(disk_map[i+1]):
-            blocks.append(Block(is_free_space=True))
+# Part 1
+
+blocks = get_blocks()
 
 previous_free_block_id = 0
 for i in range(len(blocks) - 1, -1, -1):
@@ -37,4 +42,4 @@ for i in range(len(blocks) - 1, -1, -1):
 
 checksum = sum([block.file_id * i for i, block in enumerate(blocks) if block.file_id is not None])
 
-print('Checksum:', checksum)
+print('Part 1 Checksum:', checksum)
