@@ -76,14 +76,17 @@ block_groups = get_disk_map()
 i = len(block_groups) - 1
 
 while i >= 0:
+    print('--------------------')
     print(i)
     print(get_blocks(block_groups))
+    print('!!!', block_groups[i].file_id, block_groups[i].size)
     if block_groups[i].file_id is not None:
-        for j in range(len(block_groups)):
+        for j in range(i):
             if (
                 block_groups[j].is_free_space
                 and block_groups[j].size >= block_groups[i].size
             ):
+                print('#######')
                 new_free_block_groups = (
                     BlockGroup(
                         None,
@@ -101,6 +104,7 @@ while i >= 0:
                     block_groups.insert(j + 1, new_free_block_groups[1])
                     i += 1
                 block_groups[j], block_groups[i] = block_groups[i], block_groups[j]
+                break
     i -= 1
 
 blocks = get_blocks(block_groups)
