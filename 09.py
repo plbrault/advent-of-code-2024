@@ -4,37 +4,55 @@ from datetime import datetime
 from typing import Optional
 
 @dataclass
+class BlockGroup:
+    file_id: Optional[int] = None
+    size: int = 0
+    is_free_space: bool = False
+
+@dataclass
 class Block:
     file_id: Optional[int] = None
-    file_size: Optional[int] = None
     is_free_space: bool = False
     def __repr__(self):
         if self.is_free_space:
             return '.'
         return str(self.file_id)
 
-def get_blocks(disk_map):
+def get_blocks(disk_map: [BlockGroup]):
   blocks = []
-  for i in range(0, len(disk_map), 2):
-      for j in range(disk_map[i]):
-          blocks.append(Block(file_id=int(i/2), file_size=disk_map[i]))
-      if i + 1 < len(disk_map):
-          for j in range(disk_map[i+1]):
-              blocks.append(Block(is_free_space=True))
+  for block_group in disk_map:
+    for i in range(block_group.size):
+        blocks.append(Block(block_group.file_id, block_group.is_free_space))
   return blocks
 
 def get_checksum(blocks: [Block]):
   return sum([block.file_id * i for i, block in enumerate(blocks) if block.file_id is not None])
 
-disk_map: list[int]
-
-with open('input.txt', 'r') as file:
-    first_line = file.readline().strip()
-    disk_map = [int(number) for number in first_line]
+def get_disk_map():
+    disk_map: [BlockGroup] = []
+    with open('input.txt', 'r') as file:
+        line = file.readline().strip()
+        for i in range(0, len(line), 2):
+            disk_map.append(
+                BlockGroup(
+                    int(i / 2),
+                    int(line[i]),
+                    False
+                )
+            )
+            if i < len(line) - 1:
+                disk_map.append(
+                    BlockGroup(
+                        None,
+                        int(line[i + 1]),
+                        True
+                    )
+                )
+    return disk_map
 
 # Part 1
 
-blocks = get_blocks(disk_map)
+blocks = get_blocks(get_disk_map())
 
 previous_free_block_id = 0
 for i in range(len(blocks) - 1, -1, -1):
@@ -53,38 +71,7 @@ print('Part 1 Checksum:', checksum)
 
 start_time = datetime.now()
 
-blocks = get_blocks(disk_map)
 
-last_file_id = -1
-for i in range(len(blocks) - 1, -1, -1):
-    file_start_idx = None
-    if blocks[i].is_free_space:
-        if last_file_id > -1:
-            file_start_idx = i + 1
-            last_file_id = -1
-    elif last_file_id == -1:
-        last_file_id = blocks[i].file_id
-    elif blocks[i].file_id != last_file_id:
-        file_start_idx = i + 1
-    if file_start_idx != None:
-        free_space_start_idx = None
-        free_space_size = 0
-        for j in range(0, i):
-            if blocks[j].is_free_space:
-                if free_space_start_idx is None:
-                    free_space_start_idx = j
-                free_space_size += 1
-                if free_space_size >= blocks[file_start_idx].file_size:
-                    for k in range(blocks[file_start_idx].file_size):
-                        blocks[free_space_start_idx + k], blocks[file_start_idx + k] = (
-                            blocks[file_start_idx + k], blocks[free_space_start_idx + k]
-                        )                      
-                    break
-            else:
-                free_space_start_idx = None
-                free_space_size = 0
-
-checksum = get_checksum(blocks)
 
 end_time = datetime.now()
 
