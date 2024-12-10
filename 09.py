@@ -5,6 +5,7 @@ from typing import Optional
 @dataclass
 class Block:
     file_id: Optional[int] = None
+    file_size: Optional[int] = None
     is_free_space: bool = False
     def __repr__(self):
         if self.is_free_space:
@@ -15,7 +16,7 @@ def get_blocks(disk_map):
   blocks = []
   for i in range(0, len(disk_map), 2):
       for j in range(disk_map[i]):
-          blocks.append(Block(file_id=int(i/2)))
+          blocks.append(Block(file_id=int(i/2), file_size=disk_map[i]))
       if i + 1 < len(disk_map):
           for j in range(disk_map[i+1]):
               blocks.append(Block(is_free_space=True))
@@ -63,3 +64,22 @@ for i, block in enumerate(blocks):
             contiguous_free_blocks[free_block_count] = []
         contiguous_free_blocks[free_block_count].append(i - free_block_count + 1)
         free_block_count = 0
+
+last_file_id = -1
+for i in range(len(blocks) - 1, -1, -1):
+    file_first_block = None
+    if blocks[i].is_free_space:
+        if last_file_id > -1:
+            file_first_block = blocks[i + 1]
+            last_file_id = -1
+    elif last_file_id == -1:
+        last_file_id = blocks[i].file_id
+    else:
+        file_first_block = blocks[i + 1]
+        last_file_id = blocks[i].file_id
+    if file_first_block is not None:
+        free_block_id = contiguous_free_blocks[file_first_block.file_size][0]
+        for j in range(i + 1, i + 1 + file_first_block.file_size):
+            blocks[free_block_id], blocks[j] = blocks[j], blocks[free_block_id]
+            free_block_id += 1
+        contiguous_free_blocks[file_first_block.file_size].pop(0)
