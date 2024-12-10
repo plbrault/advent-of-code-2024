@@ -71,7 +71,12 @@ print('Part 1 Checksum:', checksum)
 
 start_time = datetime.now()
 
+block_groups = get_disk_map()
 
+for i in range(len(block_groups) - 1, -1, -1):
+    pass
+
+checksum = get_checksum(get_blocks(block_groups))
 
 end_time = datetime.now()
 
