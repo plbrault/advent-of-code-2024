@@ -50,9 +50,7 @@ print('Part 1 Checksum:', checksum)
 
 # Part 2
 
-
 blocks = get_blocks(disk_map)
-
 
 last_file_id = -1
 for i in range(len(blocks) - 1, -1, -1):
@@ -66,4 +64,20 @@ for i in range(len(blocks) - 1, -1, -1):
     elif blocks[i].file_id != last_file_id:
         file_start_idx = i + 1
     if file_start_idx != None:
-        pass
+        free_space_start_idx = None
+        for j in range(len(blocks)):
+            if blocks[j].is_free_space:
+                free_space_size = 0
+                k = j
+                while blocks[k].is_free_space:
+                    free_space_size += 1
+                    k += 1
+                if free_space_size >= blocks[file_start_idx].file_size:
+                    free_space_start_idx = j
+                    break
+        for j in range(blocks[file_start_idx].file_size):
+            blocks[file_start_idx + j], blocks[free_space_start_idx + j] = blocks[free_space_start_idx + j], blocks[file_start_idx + j]
+
+checksum = get_checksum(blocks)
+
+print('Part 2 Checksum:', checksum)
