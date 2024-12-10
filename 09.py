@@ -49,4 +49,9 @@ print('Part 1 Checksum:', checksum)
 
 # Part 2
 
+
 blocks = get_blocks(disk_map)
+
+contiguous_free_blocks : {int: [[]]} = {}
+
+ 
