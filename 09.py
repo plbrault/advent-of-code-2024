@@ -72,7 +72,7 @@ for i in range(len(blocks) - 1, -1, -1):
             if blocks[j].is_free_space:
                 free_space_size = 0
                 k = j
-                while blocks[k].is_free_space:
+                while k < len(blocks) and blocks[k].is_free_space:
                     free_space_size += 1
                     k += 1
                 if free_space_size >= blocks[file_start_idx].file_size:
