@@ -73,10 +73,11 @@ start_time = datetime.now()
 
 block_groups = get_disk_map()
 
-print(get_blocks(block_groups))
+i = len(block_groups) - 1
 
-for i in range(len(block_groups) - 1, -1, -1):
+while i >= 0:
     print(i)
+    print(get_blocks(block_groups))
     if block_groups[i].file_id is not None:
         for j in range(len(block_groups)):
             if (
@@ -100,6 +101,7 @@ for i in range(len(block_groups) - 1, -1, -1):
                     block_groups.insert(j + 1, new_free_block_groups[1])
                     i += 1
                 block_groups[j], block_groups[i] = block_groups[i], block_groups[j]
+    i -= 1
 
 blocks = get_blocks(block_groups)
 
