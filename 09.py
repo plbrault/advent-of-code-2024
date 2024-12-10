@@ -26,4 +26,11 @@ for i in range(0, len(disk_map), 2):
         for j in range(disk_map[i+1]):
             blocks.append(Block(is_free_space=True))
 
-print(blocks)
+previous_free_block_id = 0
+for i in range(len(blocks) - 1, -1, -1):
+    if not blocks[i].is_free_space:
+        for j in range(previous_free_block_id, i):
+          if blocks[j].is_free_space:
+            blocks[i], blocks[j] = blocks[j], blocks[i]
+            previous_free_block_id = j
+            break
