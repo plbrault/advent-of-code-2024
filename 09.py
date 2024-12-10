@@ -73,10 +73,37 @@ start_time = datetime.now()
 
 block_groups = get_disk_map()
 
-for i in range(len(block_groups) - 1, -1, -1):
-    pass
+print(get_blocks(block_groups))
 
-checksum = get_checksum(get_blocks(block_groups))
+for i in range(len(block_groups) - 1, -1, -1):
+    if block_groups[i].file_id is not None:
+        for j in range(len(block_groups)):
+            if (
+                block_groups[j].is_free_space
+                and block_groups[j].size >= block_groups[i].size
+            ):
+                new_free_block_groups = (
+                    BlockGroup(
+                        None,
+                        block_groups[i].size,
+                        True
+                    ),
+                    BlockGroup(
+                        None,
+                        block_groups[i].size - block_groups[j].size,
+                        True
+                    )
+                )
+                if new_free_block_groups[1].size > 0:
+                    block_groups[j] = new_free_block_groups[0]
+                    block_groups.insert(j + 1, new_free_block_groups[1])
+                block_groups[j], block_groups[i] = block_groups[i], block_groups[j]
+
+blocks = get_blocks(block_groups)
+
+print(blocks)
+
+checksum = get_checksum(blocks)
 
 end_time = datetime.now()
 
