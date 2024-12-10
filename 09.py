@@ -98,6 +98,7 @@ for i in range(len(block_groups) - 1, -1, -1):
                     block_groups[j] = new_free_block_groups[0]
                     block_groups.insert(j + 1, new_free_block_groups[1])
                 block_groups[j], block_groups[i] = block_groups[i], block_groups[j]
+                break
 
 blocks = get_blocks(block_groups)
 
