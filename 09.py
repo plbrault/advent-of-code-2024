@@ -1,5 +1,6 @@
 
 from dataclasses import dataclass
+from datetime import datetime
 from typing import Optional
 
 @dataclass
@@ -50,6 +51,8 @@ print('Part 1 Checksum:', checksum)
 
 # Part 2
 
+start_time = datetime.now()
+
 blocks = get_blocks(disk_map)
 
 last_file_id = -1
@@ -80,4 +83,7 @@ for i in range(len(blocks) - 1, -1, -1):
 
 checksum = get_checksum(blocks)
 
+end_time = datetime.now()
+
 print('Part 2 Checksum:', checksum)
+print('Executed in:', (end_time - start_time).total_seconds(), 'seconds.')
