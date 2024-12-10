@@ -52,6 +52,14 @@ print('Part 1 Checksum:', checksum)
 
 blocks = get_blocks(disk_map)
 
-contiguous_free_blocks : {int: [[]]} = {}
+contiguous_free_blocks : { int: [ int ] } = {}
 
- 
+free_block_count = 0
+for i, block in enumerate(blocks):
+    if block.is_free_space:
+        free_block_count += 1
+    elif free_block_count > 0:
+        if not free_block_count in contiguous_free_blocks:
+            contiguous_free_blocks[free_block_count] = []
+        contiguous_free_blocks[free_block_count].append(i - free_block_count + 1)
+        free_block_count = 0
