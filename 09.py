@@ -76,6 +76,7 @@ block_groups = get_disk_map()
 print(get_blocks(block_groups))
 
 for i in range(len(block_groups) - 1, -1, -1):
+    print(i)
     if block_groups[i].file_id is not None:
         for j in range(len(block_groups)):
             if (
@@ -90,19 +91,17 @@ for i in range(len(block_groups) - 1, -1, -1):
                     ),
                     BlockGroup(
                         None,
-                        block_groups[i].size - block_groups[j].size,
+                        block_groups[j].size - block_groups[i].size,
                         True
                     )
                 )
                 if new_free_block_groups[1].size > 0:
                     block_groups[j] = new_free_block_groups[0]
                     block_groups.insert(j + 1, new_free_block_groups[1])
+                    i += 1
                 block_groups[j], block_groups[i] = block_groups[i], block_groups[j]
-                break
 
 blocks = get_blocks(block_groups)
-
-print(blocks)
 
 checksum = get_checksum(blocks)
 
