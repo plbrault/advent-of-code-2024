@@ -55,6 +55,8 @@ start_time = datetime.now()
 
 blocks = get_blocks(disk_map)
 
+print(blocks)
+
 last_file_id = -1
 for i in range(len(blocks) - 1, -1, -1):
     file_start_idx = None
@@ -68,18 +70,23 @@ for i in range(len(blocks) - 1, -1, -1):
         file_start_idx = i + 1
     if file_start_idx != None:
         free_space_start_idx = None
+        free_space_size = 0
         for j in range(len(blocks)):
             if blocks[j].is_free_space:
-                free_space_size = 0
-                k = j
-                while k < len(blocks) and blocks[k].is_free_space:
-                    free_space_size += 1
-                    k += 1
-                if free_space_size >= blocks[file_start_idx].file_size:
+                if free_space_start_idx is None:
                     free_space_start_idx = j
+                free_space_size += 1
+                if free_space_size >= blocks[file_start_idx].file_size:
+                    print('!!!!!', free_space_start_idx, free_space_size)
+                    for k in range(blocks[file_start_idx].file_size):
+                        blocks[free_space_start_idx + k], blocks[file_start_idx + k] = (
+                            blocks[file_start_idx + k], blocks[free_space_start_idx + k]
+                        )
+                    print(blocks)                        
                     break
-        for j in range(blocks[file_start_idx].file_size):
-            blocks[file_start_idx + j], blocks[free_space_start_idx + j] = blocks[free_space_start_idx + j], blocks[file_start_idx + j]
+            else:
+                free_space_start_idx = None
+                free_space_size = 0
 
 checksum = get_checksum(blocks)
 
