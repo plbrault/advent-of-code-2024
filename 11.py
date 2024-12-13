@@ -15,7 +15,7 @@ def split_number(number_of_digits, number):
     return number // 10 ** (number_of_digits // 2), number % 10 ** (number_of_digits // 2)
 
 @cache
-def blink(stone):
+def blink(stone: int):
     if stone == 0:
         return [1]
     number_of_digits = get_number_of_digits(stone)
@@ -24,14 +24,18 @@ def blink(stone):
         return [left_stone, right_stone]
     return [stone * 2024]
 
-def compute(stones):
-    new_stones = []
-    for stone in stones:
-        new_stones += blink(stone)
-    return new_stones
+@cache
+def calculate_number_of_stones(stone: int, remaining_blinks: int):
+    if remaining_blinks == 0:
+        return 1
+    new_stones = blink(stone)
+    number_of_stones = 0
+    for stone in new_stones:
+        number_of_stones += calculate_number_of_stones(stone, remaining_blinks - 1)
+    return number_of_stones
 
-for i in range(25):
-    print('Blink #', i)
-    stones = compute(stones)
+number_of_stones = 0
+for stone in stones:
+    number_of_stones += calculate_number_of_stones(stone, 25)
 
-print('Final number of stones:', len(stones))
+print('Final number of stones:', number_of_stones)
