@@ -36,6 +36,6 @@ def calculate_number_of_stones(stone: int, remaining_blinks: int):
 
 number_of_stones = 0
 for stone in stones:
-    number_of_stones += calculate_number_of_stones(stone, 25)
+    number_of_stones += calculate_number_of_stones(stone, 75)
 
 print('Final number of stones:', number_of_stones)
