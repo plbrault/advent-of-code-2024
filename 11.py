@@ -1,5 +1,6 @@
 import math
 from datetime import datetime
+from functools import cache
 
 stones : [int]
 
@@ -13,32 +14,24 @@ def get_number_of_digits(number):
 def split_number(number_of_digits, number):
     return number // 10 ** (number_of_digits // 2), number % 10 ** (number_of_digits // 2)
 
-def blink(stones):
+@cache
+def blink(stone):
+    if stone == 0:
+        return [1]
+    number_of_digits = get_number_of_digits(stone)
+    if number_of_digits % 2 == 0:
+        left_stone, right_stone = split_number(number_of_digits, stone)
+        return [left_stone, right_stone]
+    return [stone * 2024]
+
+def compute(stones):
     new_stones = []
     for stone in stones:
-        if stone == 0:
-            new_stones.append(1)
-        else:
-            number_of_digits = get_number_of_digits(stone)
-            if number_of_digits % 2 == 0:
-                left_stone, right_stone = split_number(number_of_digits, stone)
-                new_stones.append(left_stone)
-                new_stones.append(right_stone)
-            else:
-                new_stones.append(stone * 2024)
+        new_stones += blink(stone)
     return new_stones
 
 for i in range(25):
     print('Blink #', i)
-    stones = blink(stones)
+    stones = compute(stones)
 
-print('Number of stones after 25 blinks:', len(stones))
-
-last_blink = datetime.now()
-for i in range(50):
-    print('Blink #', i + 25)
-    stones = blink(stones)
-    print('Number of stones:', len(stones))
-    print('Blink duration:', datetime.now() - last_blink)
-
-print('Number of stones after 75 blinks:', len(stones))
+print('Final number of stones:', len(stones))
