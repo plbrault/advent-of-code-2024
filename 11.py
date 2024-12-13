@@ -102,7 +102,6 @@ for i in range(9, 10):
         blink_count += 1
     precomputations[i] = (blink_count, [new_stone.value for new_stone in new_stones])    
 precomputations[0] = (precomputations[1][0] + 1, precomputations[1][1])
-precomputations[8] = (5, [3, 2, 7, 7, 2, 6, 16192])
 
 print(precomputations)
 
