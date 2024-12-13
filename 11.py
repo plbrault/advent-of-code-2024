@@ -25,8 +25,6 @@ def split_number(number_of_digits, number):
 
 precomputations = {}
 
-debug = False
-
 def blink(stones: [Stone]):
     new_stones = []
     for stone in stones:
@@ -71,7 +69,7 @@ def blink(stones: [Stone]):
     return new_stones
 
 for i in range(1, 8):
-    debug = True
+    print('####', i)
     stone = Stone(i * 2024, MAX_BLINKS - 1)
     blink_count = 1
     new_stones = [stone]
@@ -83,7 +81,7 @@ for i in range(1, 8):
         new_stones = blink(new_stones)
         blink_count += 1
     precomputations[i] = (blink_count, [new_stone.value for new_stone in new_stones])
-precomputations[0] = (precomputations[1][0] + 1, precomputations[1][1])
+precomputations[0] = (precomputations[1][0]+ 1, precomputations[1][1])
 
 for i in range(MAX_BLINKS):
     stones = blink(stones)
