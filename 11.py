@@ -2,7 +2,7 @@
 from dataclasses import dataclass
 import math
 
-MAX_BLINKS = 75
+MAX_BLINKS = 25
 
 @dataclass
 class Stone:
@@ -86,8 +86,6 @@ for i in range(1, 8):
 precomputations[0] = (precomputations[1][0] + 1, precomputations[1][1])
 
 for i in range(MAX_BLINKS):
-    print('Blink #', i)
     stones = blink(stones)
-    print(min(stone.remaining_blinks for stone in stones), max(stone.remaining_blinks for stone in stones))
 
 print('Final number of stones:', len(stones))
