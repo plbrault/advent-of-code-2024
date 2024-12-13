@@ -1,8 +1,9 @@
 
 from dataclasses import dataclass
+from datetime import datetime
 import math
 
-MAX_BLINKS = 75
+MAX_BLINKS = 25
 
 @dataclass
 class Stone:
@@ -70,7 +71,10 @@ def blink(stones: [Stone]):
                     )
     return new_stones
 
+start_time = datetime.now()
+
 for i in range(1, 8):
+    print('Precomputing', i, '...')
     debug = True
     stone = Stone(i * 2024, MAX_BLINKS - 1)
     blink_count = 1
@@ -83,11 +87,30 @@ for i in range(1, 8):
         new_stones = blink(new_stones)
         blink_count += 1
     precomputations[i] = (blink_count, [new_stone.value for new_stone in new_stones])
+for i in range(9, 10):
+    print('Precomputing', i, '...')
+    debug = True
+    stone = Stone(i * 2024, MAX_BLINKS - 1)
+    blink_count = 1
+    new_stones = [stone]
+    while len([
+        new_stone for new_stone
+            in new_stones
+            if get_number_of_digits(new_stone.value) > 1
+    ]) > 0:
+        new_stones = blink(new_stones)
+        blink_count += 1
+    precomputations[i] = (blink_count, [new_stone.value for new_stone in new_stones])    
 precomputations[0] = (precomputations[1][0] + 1, precomputations[1][1])
+
+print(precomputations)
 
 for i in range(MAX_BLINKS):
     print('Blink #', i)
     stones = blink(stones)
     print(min(stone.remaining_blinks for stone in stones), max(stone.remaining_blinks for stone in stones))
 
+end_time = datetime.now()
+
 print('Final number of stones:', len(stones))
+print('Executed in:', (end_time - start_time).total_seconds(), 'seconds.')
