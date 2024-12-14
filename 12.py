@@ -62,22 +62,24 @@ def calculate_perimeter(region):
             perimeter += 1
     return perimeter
 
-def count_sides(region):
-    vertical_sides: set[int] = set()
-    horizontal_sides: set[int] = set()
+def get_region_matrix(region):
+    min_x = min(plot[0] for plot in region)
+    max_x = max(plot[0] for plot in region)
+    min_y = min(plot[1] for plot in region)
+    max_y = max(plot[1] for plot in region)
+
+    matrix = [['' for _ in range(max_x - min_x + 1)] for _ in range(max_y - min_y + 1)]
 
     for plot in region:
         x, y = plot
-        if y == 0 or garden[y - 1][x] != garden[y][x]:
-            horizontal_sides.add(y)
-        if x == len(garden[y]) - 1 or garden[y][x + 1] != garden[y][x]:
-            vertical_sides.add(x + 1)
-        if y == len(garden) - 1 or garden[y + 1][x] != garden[y][x]:
-            horizontal_sides.add(y + 1)
-        if x == 0 or garden[y][x - 1] != garden[y][x]:
-            vertical_sides.add(x)
-    
-    return len(vertical_sides) + len(horizontal_sides)
+        matrix[y - min_y][x - min_x] = garden[y][x]
+
+    return matrix    
+
+def count_sides(region):
+    region_matrix = get_region_matrix(region)
+
+    return 0
 
 regions = get_regions(garden)
 
