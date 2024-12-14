@@ -61,10 +61,10 @@ def calculate_perimeter(region):
             perimeter += 1
     return perimeter
 
-total_perimeter = 0
+total_price = 0
 for region in regions:
     perimeter = calculate_perimeter(region)
-    print('Region:', garden[region[0][1]][region[0][0]], 'Perimeter:', perimeter)
-    total_perimeter += calculate_perimeter(region)
+    area = len(region)
+    total_price += area * perimeter
 
-print('Total perimeter:', total_perimeter)
+print('Total price:', total_price)
