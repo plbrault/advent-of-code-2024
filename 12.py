@@ -61,10 +61,21 @@ def calculate_perimeter(region):
             perimeter += 1
     return perimeter
 
+def count_sides(region):
+    pass
+
 total_price = 0
 for region in regions:
     perimeter = calculate_perimeter(region)
     area = len(region)
     total_price += area * perimeter
 
-print('Total price:', total_price)
+print('Total price (part 1):', total_price)
+
+total_price = 0
+for region in regions:
+    sides = count_sides(region)
+    area = len(region)
+    total_price += area * sides
+
+print('Total price (part 2):', total_price)
