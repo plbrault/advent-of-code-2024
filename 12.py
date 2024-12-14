@@ -103,16 +103,24 @@ def has_bottom_side(region_matrix, x, y):
 def count_sides(region):
     region_matrix = get_region_matrix(region)
     sides = 0
-
+    print('!!!!!!!!!!', garden[region[0][1]][region[0][0]])
     # Check for vertical sides
     for x in range(len(region_matrix[0])):
         for y in range(len(region_matrix)):
             above_has_left_side = y != 0 and has_left_side(region_matrix, x, y - 1)
             above_has_right_side = y != 0 and has_right_side(region_matrix, x, y - 1)
             if has_left_side(region_matrix, x, y) and not above_has_left_side:
+                print(x, y, 'has left side')
                 sides += 1
+            else:
+                print(x, y, 'no left side')
             if has_right_side(region_matrix, x, y) and not above_has_right_side:
                 sides += 1
+                print(x, y, 'has right side')
+            else:
+                print(x, y, 'no right side')
+
+    print('vertical sides', sides)
 
     # Check for horizontal sides
     for y in range(len(region_matrix)):
