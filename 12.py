@@ -80,7 +80,7 @@ def has_plot_on_the_left(region_matrix, x, y):
     return x != 0 and region_matrix[y][x - 1] != ''
 
 def has_plot_on_the_right(region_matrix, x, y):
-    return x != len(region_matrix[0]) - 1 and region_matrix[y][x + 1] != ''
+    return region_matrix[y][x] != ''
 
 def has_left_side(region_matrix, x, y):
     return not has_plot_on_the_left(region_matrix, x, y) and has_plot_on_the_right(region_matrix, x, y)
@@ -92,7 +92,7 @@ def has_plot_above(region_matrix, x, y):
     return y != 0 and region_matrix[y - 1][x] != ''
 
 def has_plot_below(region_matrix, x, y):
-    return y != len(region_matrix) - 1 and region_matrix[y + 1][x] != ''
+    return region_matrix[y][x] != ''
 
 def has_top_side(region_matrix, x, y):
     return not has_plot_above(region_matrix, x, y) and has_plot_below(region_matrix, x, y)
