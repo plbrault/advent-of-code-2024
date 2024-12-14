@@ -1,6 +1,6 @@
 garden = [list(line.strip()) for line in open('input.txt')]
 
-def walk_garden(garden, plot: tuple[int, int], visited_plots):
+def walk_garden(garden, plot: tuple[int, int], visited_plots: set(tuple[int, int])) -> list[tuple[int, int]]:
     x, y = plot
     region = [plot]
     visited_plots.add(plot)
