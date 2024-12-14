@@ -1,5 +1,17 @@
 garden = [list(line.strip()) for line in open('input.txt')]
 
+def get_regions(garden):
+    regions = []
+    visited_plots = set()
+    
+    for y in range(len(garden)):
+        for x in range(len(garden[y])):
+            if (x, y) not in visited_plots:
+                region = walk_garden(garden, (x, y), visited_plots)
+                regions.append(region)
+
+    return regions
+
 def walk_garden(garden, plot, visited_plots):
     x, y = plot
     region = [plot]
@@ -53,14 +65,7 @@ def calculate_perimeter(region):
 def count_sides(region):
     return 0
 
-regions = []
-visited_plots = set()
-
-for y in range(len(garden)):
-    for x in range(len(garden[y])):
-        if (x, y) not in visited_plots:
-            region = walk_garden(garden, (x, y), visited_plots)
-            regions.append(region)
+regions = get_regions(garden)
 
 total_price = 0
 for region in regions:
