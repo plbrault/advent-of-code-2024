@@ -36,17 +36,6 @@ def walk_garden(garden, plot, visited_plots):
     
     return region
 
-regions = []
-visited_plots = set()
-
-for y in range(len(garden)):
-    for x in range(len(garden[y])):
-        if (x, y) not in visited_plots:
-            region = walk_garden(garden, (x, y), visited_plots)
-            regions.append(region)
-
-print(len(regions), 'regions')
-
 def calculate_perimeter(region):
     perimeter = 0
     for plot in region:
@@ -62,7 +51,16 @@ def calculate_perimeter(region):
     return perimeter
 
 def count_sides(region):
-    pass
+    return 0
+
+regions = []
+visited_plots = set()
+
+for y in range(len(garden)):
+    for x in range(len(garden[y])):
+        if (x, y) not in visited_plots:
+            region = walk_garden(garden, (x, y), visited_plots)
+            regions.append(region)
 
 total_price = 0
 for region in regions:
