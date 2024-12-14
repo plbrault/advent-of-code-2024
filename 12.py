@@ -63,7 +63,21 @@ def calculate_perimeter(region):
     return perimeter
 
 def count_sides(region):
-    return 0
+    vertical_sides: set[int] = set()
+    horizontal_sides: set[int] = set()
+
+    for plot in region:
+        x, y = plot
+        if y == 0 or garden[y - 1][x] != garden[y][x]:
+            horizontal_sides.add(y)
+        if x == len(garden[y]) - 1 or garden[y][x + 1] != garden[y][x]:
+            vertical_sides.add(x)
+        if y == len(garden) - 1 or garden[y + 1][x] != garden[y][x]:
+            horizontal_sides.add(y + 1)
+        if x == 0 or garden[y][x - 1] != garden[y][x]:
+            vertical_sides.add(x - 1)
+    
+    return len(vertical_sides) + len(horizontal_sides)
 
 regions = get_regions(garden)
 
@@ -78,6 +92,7 @@ print('Total price (part 1):', total_price)
 total_price = 0
 for region in regions:
     sides = count_sides(region)
+    print('Region:', garden[region[0][1]][region[0][0]], 'Sides:', sides)
     area = len(region)
     total_price += area * sides
 
