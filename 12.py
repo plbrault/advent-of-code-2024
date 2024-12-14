@@ -76,10 +76,56 @@ def get_region_matrix(region):
 
     return matrix    
 
+def has_plot_on_the_left(region_matrix, x, y):
+    return x != 0 and region_matrix[y][x - 1] != ''
+
+def has_plot_on_the_right(region_matrix, x, y):
+    return x != len(region_matrix[0]) - 1 and region_matrix[y][x + 1] != ''
+
+def has_left_side(region_matrix, x, y):
+    return not has_plot_on_the_left(region_matrix, x, y) and has_plot_on_the_right(region_matrix, x, y)
+
+def has_right_side(region_matrix, x, y):
+    return has_plot_on_the_left(region_matrix, x, y) and not has_plot_on_the_right(region_matrix, x, y)
+
+def has_plot_above(region_matrix, x, y):
+    return y != 0 and region_matrix[y - 1][x] != ''
+
+def has_plot_below(region_matrix, x, y):
+    return y != len(region_matrix) - 1 and region_matrix[y + 1][x] != ''
+
+def has_top_side(region_matrix, x, y):
+    return not has_plot_above(region_matrix, x, y) and has_plot_below(region_matrix, x, y)
+
+def has_bottom_side(region_matrix, x, y):
+    return has_plot_above(region_matrix, x, y) and not has_plot_below(region_matrix, x, y)
+
 def count_sides(region):
     region_matrix = get_region_matrix(region)
+    sides = 0
 
-    return 0
+    # Check for vertical sides
+    for x in range(len(region_matrix[0])):
+        for y in range(len(region_matrix)):
+            above_has_left_side = y != 0 and has_left_side(region_matrix, x, y - 1)
+            above_has_right_side = y != 0 and has_right_side(region_matrix, x, y - 1)
+            if has_left_side(region_matrix, x, y) and not above_has_left_side:
+                sides += 1
+            if has_right_side(region_matrix, x, y) and not above_has_right_side:
+                sides += 1
+
+    # Check for horizontal sides
+    for y in range(len(region_matrix)):
+        for x in range(len(region_matrix[0])):
+            left_has_top_side = x != 0 and has_top_side(region_matrix, x - 1, y)
+            left_has_bottom_side = x != 0 and has_bottom_side(region_matrix, x - 1, y)
+            if has_top_side(region_matrix, x, y) and not left_has_top_side:
+                sides += 1
+            if has_bottom_side(region_matrix, x, y) and not left_has_bottom_side:
+                sides += 1
+
+    return sides
+        
 
 regions = get_regions(garden)
 
