@@ -46,3 +46,25 @@ for y in range(len(garden)):
             regions.append(region)
 
 print(len(regions), 'regions')
+
+def calculate_perimeter(region):
+    perimeter = 0
+    for plot in region:
+        x, y = plot
+        if y == 0 or garden[y - 1][x] != garden[y][x]:
+            perimeter += 1
+        if x == len(garden[y]) - 1 or garden[y][x + 1] != garden[y][x]:
+            perimeter += 1
+        if y == len(garden) - 1 or garden[y + 1][x] != garden[y][x]:
+            perimeter += 1
+        if x == 0 or garden[y][x - 1] != garden[y][x]:
+            perimeter += 1
+    return perimeter
+
+total_perimeter = 0
+for region in regions:
+    perimeter = calculate_perimeter(region)
+    print('Region:', garden[region[0][1]][region[0][0]], 'Perimeter:', perimeter)
+    total_perimeter += calculate_perimeter(region)
+
+print('Total perimeter:', total_perimeter)
