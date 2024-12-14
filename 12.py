@@ -71,11 +71,11 @@ def count_sides(region):
         if y == 0 or garden[y - 1][x] != garden[y][x]:
             horizontal_sides.add(y)
         if x == len(garden[y]) - 1 or garden[y][x + 1] != garden[y][x]:
-            vertical_sides.add(x)
+            vertical_sides.add(x + 1)
         if y == len(garden) - 1 or garden[y + 1][x] != garden[y][x]:
             horizontal_sides.add(y + 1)
         if x == 0 or garden[y][x - 1] != garden[y][x]:
-            vertical_sides.add(x - 1)
+            vertical_sides.add(x)
     
     return len(vertical_sides) + len(horizontal_sides)
 
