@@ -1,3 +1,5 @@
+import numpy as np
+
 def parse_file(filename):
     machines = []
     with open(filename, 'r') as file:
@@ -26,4 +28,21 @@ def parse_file(filename):
     return machines
 
 machines = parse_file('input.txt')
-print(machines)
+
+tokens = 0
+
+for machine in machines:
+    a, b = np.linalg.solve(
+        [
+            [machine['a'][0], machine['b'][0]],
+            [machine['a'][1], machine['b'][1]]
+        ],
+        [machine['prize'][0], machine['prize'][1]]
+    )
+    a = int(a)
+    b = int(b)
+
+    if a <= 100 and b <= 100:
+        tokens += 3 * a + b
+
+print('Number of tokens:', tokens)
