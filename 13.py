@@ -15,9 +15,6 @@ def parse_file(filename):
             prize = lines[2].split(':')[1].strip()
             prize_x = prize.split(',')[0].split('=')[1]
             prize_y = prize.split(',')[1].split('=')[1]
-            print(f'Button A: ({button_a_x}, {button_a_y})')
-            print(f'Button B: ({button_b_x}, {button_b_y})')
-            print(f'Prize: ({prize_x}, {prize_y})')
 
             machine = {
                 'a': (int(button_a_x), int(button_a_y)),
@@ -39,10 +36,14 @@ for machine in machines:
         ],
         [machine['prize'][0], machine['prize'][1]]
     )
-    a = int(a)
-    b = int(b)
 
-    if a <= 100 and b <= 100:
-        tokens += 3 * a + b
+    if 0 <= a <= 100 and 0 <= b <= 100:
+        a = int(round(a))
+        b = int(round(b))
+        if (
+            machine['a'][0] * a + machine['b'][0] * b == machine['prize'][0] and
+            machine['a'][1] * a + machine['b'][1] * b == machine['prize'][1]
+        ):
+            tokens += 3 * a + b
 
 print('Number of tokens:', tokens)
