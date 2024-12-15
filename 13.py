@@ -45,4 +45,17 @@ def calculate_tokens(machines, max_button_presses=float('inf')):
                 tokens += 3 * a + b
     return tokens
 
-print(calculate_tokens(parse_file('input.txt'), max_button_presses=100))
+# Part 1
+machines = parse_file('input.txt')
+tokens = calculate_tokens(machines, 100)
+print('Number of tokens (part 1):', tokens)
+
+# Part 2
+for machine in machines:
+    value_to_add = 10000000000000
+    machine['prize'] = (
+        machine['prize'][0] + value_to_add,
+        machine['prize'][1] + value_to_add
+    )
+tokens = calculate_tokens(machines)
+print('Number of tokens (part 2):', tokens)
