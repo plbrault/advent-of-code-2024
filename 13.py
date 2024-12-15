@@ -24,26 +24,25 @@ def parse_file(filename):
             machines.append(machine)
     return machines
 
-machines = parse_file('input.txt')
+def calculate_tokens(machines, max_button_presses=float('inf')):
+    tokens = 0
+    for machine in machines:
+        a, b = np.linalg.solve(
+            [
+                [machine['a'][0], machine['b'][0]],
+                [machine['a'][1], machine['b'][1]]
+            ],
+            [machine['prize'][0], machine['prize'][1]]
+        )
 
-tokens = 0
+        if 0 <= a <= max_button_presses and 0 <= b <= max_button_presses:
+            a = int(round(a))
+            b = int(round(b))
+            if (
+                machine['a'][0] * a + machine['b'][0] * b == machine['prize'][0] and
+                machine['a'][1] * a + machine['b'][1] * b == machine['prize'][1]
+            ):
+                tokens += 3 * a + b
+    return tokens
 
-for machine in machines:
-    a, b = np.linalg.solve(
-        [
-            [machine['a'][0], machine['b'][0]],
-            [machine['a'][1], machine['b'][1]]
-        ],
-        [machine['prize'][0], machine['prize'][1]]
-    )
-
-    if 0 <= a <= 100 and 0 <= b <= 100:
-        a = int(round(a))
-        b = int(round(b))
-        if (
-            machine['a'][0] * a + machine['b'][0] * b == machine['prize'][0] and
-            machine['a'][1] * a + machine['b'][1] * b == machine['prize'][1]
-        ):
-            tokens += 3 * a + b
-
-print('Number of tokens:', tokens)
+print(calculate_tokens(parse_file('input.txt'), max_button_presses=100))
